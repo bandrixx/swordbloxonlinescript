@@ -1,142 +1,107 @@
--- URL of the allowed game
-local allowedGameId = 4733278992
-local currentGameId = game.PlaceId
+-- ENTIRE SOURCE CODE IN THIS CODE HERE! CREDIT IF WANNA REMAKE.
 
--- Check if the script is executed in the correct game
-if currentGameId ~= allowedGameId then
-    game.Players.LocalPlayer:Kick("This script only works in the correct game: Sword Blox Online Rebirth.")
-    return
-end
 
--- Create the frame and set background color to RGB(10, 10, 10)
+-- Create a ScreenGui for the UI elements
 local screenGui = Instance.new("ScreenGui")
 screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
+-- Create the main frame
 local mainFrame = Instance.new("Frame")
-mainFrame.Size = UDim2.new(0, 400, 0, 300)  -- Adjust size to fit the content
-mainFrame.Position = UDim2.new(0.5, -200, 0.5, -150)  -- Center the frame
+mainFrame.Size = UDim2.new(0, 400, 0, 250)
+mainFrame.Position = UDim2.new(0.5, -200, 0.5, -125)  -- Center the frame
 mainFrame.BackgroundColor3 = Color3.fromRGB(10, 10, 10)  -- Set background color to RGB(10, 10, 10)
 mainFrame.Parent = screenGui
 
--- Create the farm section
-local farmSection = Instance.new("TextLabel")
-farmSection.Size = UDim2.new(0, 400, 0, 50)
-farmSection.Position = UDim2.new(0, 0, 0, 0)
-farmSection.BackgroundTransparency = 1
-farmSection.Text = "Farm"
-farmSection.TextColor3 = Color3.fromRGB(255, 255, 255)  -- White text
-farmSection.TextSize = 24
-farmSection.TextBold = true
-farmSection.Parent = mainFrame
+-- Create the Farm section label
+local farmLabel = Instance.new("TextLabel")
+farmLabel.Size = UDim2.new(0, 150, 0, 40)
+farmLabel.Position = UDim2.new(0, 10, 0, 10)
+farmLabel.Text = "Farm"
+farmLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+farmLabel.BackgroundTransparency = 1
+farmLabel.Parent = mainFrame
 
--- Create toggle buttons for Farm options
-local farmBoarsToggleButton = Instance.new("TextButton")
-farmBoarsToggleButton.Size = UDim2.new(0, 200, 0, 50)
-farmBoarsToggleButton.Position = UDim2.new(0, 0, 0, 50)
-farmBoarsToggleButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)  -- Red when OFF
-farmBoarsToggleButton.Text = "Farm Boars (OFF)"
-farmBoarsToggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)  -- White text
-farmBoarsToggleButton.TextSize = 18
-farmBoarsToggleButton.Parent = mainFrame
+-- Create the KillAura toggle label
+local killAuraLabel = Instance.new("TextLabel")
+killAuraLabel.Size = UDim2.new(0, 150, 0, 40)
+killAuraLabel.Position = UDim2.new(0, 10, 0, 50)
+killAuraLabel.Text = "KillAura (OFF)"
+killAuraLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+killAuraLabel.BackgroundTransparency = 1
+killAuraLabel.Parent = mainFrame
 
--- Create toggle for Aim Assist
-local aimAssistToggleButton = Instance.new("TextButton")
-aimAssistToggleButton.Size = UDim2.new(0, 200, 0, 50)
-aimAssistToggleButton.Position = UDim2.new(0, 0, 0, 150)
-aimAssistToggleButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)  -- Red when OFF
-aimAssistToggleButton.Text = "Aim Assist (OFF)"
-aimAssistToggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)  -- White text
-aimAssistToggleButton.TextSize = 18
-aimAssistToggleButton.Parent = mainFrame
+-- Create the AutoAFK toggle label
+local autoAFKLabel = Instance.new("TextLabel")
+autoAFKLabel.Size = UDim2.new(0, 150, 0, 40)
+autoAFKLabel.Position = UDim2.new(0, 200, 0, 50)
+autoAFKLabel.Text = "AutoAFK (OFF)"
+autoAFKLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+autoAFKLabel.BackgroundTransparency = 1
+autoAFKLabel.Parent = mainFrame
 
--- Create toggle for Kill Aura
-local killAuraToggleButton = Instance.new("TextButton")
-killAuraToggleButton.Size = UDim2.new(0, 200, 0, 50)
-killAuraToggleButton.Position = UDim2.new(0, 0, 0, 200)
-killAuraToggleButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)  -- Red when OFF
-killAuraToggleButton.Text = "Kill Aura (OFF)"
-killAuraToggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)  -- White text
-killAuraToggleButton.TextSize = 18
-killAuraToggleButton.Parent = mainFrame
+-- Create the AURA section label
+local auraLabel = Instance.new("TextLabel")
+auraLabel.Size = UDim2.new(0, 150, 0, 40)
+auraLabel.Position = UDim2.new(0, 10, 0, 100)
+auraLabel.Text = "AURA"
+auraLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+auraLabel.BackgroundTransparency = 1
+auraLabel.Parent = mainFrame
 
--- Toggle logic for buttons
-local function toggleButton(button, toggleState)
-    if toggleState then
-        button.BackgroundColor3 = Color3.fromRGB(255, 255, 255)  -- White when ON
-        button.Text = button.Text:match("(.*) %(OFF%)") .. " (ON)"
-    else
-        button.BackgroundColor3 = Color3.fromRGB(255, 0, 0)  -- Red when OFF
-        button.Text = button.Text:match("(.*) %(ON%)") .. " (OFF)"
-    end
+-- Create the AimAssist toggle label
+local aimAssistLabel = Instance.new("TextLabel")
+aimAssistLabel.Size = UDim2.new(0, 150, 0, 40)
+aimAssistLabel.Position = UDim2.new(0, 10, 0, 150)
+aimAssistLabel.Text = "AimAssist (OFF)"
+aimAssistLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+aimAssistLabel.BackgroundTransparency = 1
+aimAssistLabel.Parent = mainFrame
+
+-- Create the AutoJump toggle label
+local autoJumpLabel = Instance.new("TextLabel")
+autoJumpLabel.Size = UDim2.new(0, 150, 0, 40)
+autoJumpLabel.Position = UDim2.new(0, 200, 0, 150)
+autoJumpLabel.Text = "AutoJump (OFF)"
+autoJumpLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+autoJumpLabel.BackgroundTransparency = 1
+autoJumpLabel.Parent = mainFrame
+
+-- Toggle States (initially OFF)
+local killAuraState = false
+local aimAssistState = false
+local autoAFKState = false
+local autoJumpState = false
+
+-- Function to toggle KillAura
+local function toggleKillAura()
+    killAuraState = not killAuraState
+    killAuraLabel.Text = "KillAura (" .. (killAuraState and "ON" or "OFF") .. ")"
+    -- Implement KillAura functionality here
 end
 
-local killAuraToggle = false
-local aimAssistToggle = false
-
--- Function to get closest entity
-local function getClosestEntity()
-    local closestEntity = nil
-    local shortestDistance = math.huge  -- Set a high initial value
-    local player = game.Players.LocalPlayer
-    local humanoids = game.Workspace:GetChildren()
-
-    for _, entity in ipairs(humanoids) do
-        if entity:IsA("Model") and entity:FindFirstChild("Humanoid") then
-            local humanoid = entity.Humanoid
-            local distance = (entity.PrimaryPart.Position - player.Character.HumanoidRootPart.Position).magnitude
-            if distance < shortestDistance then
-                closestEntity = entity
-                shortestDistance = distance
-            end
-        end
-    end
-    return closestEntity
+-- Function to toggle AimAssist
+local function toggleAimAssist()
+    aimAssistState = not aimAssistState
+    aimAssistLabel.Text = "AimAssist (" .. (aimAssistState and "ON" or "OFF") .. ")"
+    -- Implement AimAssist functionality here
 end
 
--- Kill Aura function
-local function activateKillAura()
-    while killAuraToggle do
-        local target = getClosestEntity()
-        if target then
-            -- Perform the kill action here (this is just a placeholder)
-            print("Kill Aura Target: " .. target.Name)
-            -- You can simulate attacking or performing an action here
-        end
-        wait(1)  -- Delay between each kill check
-    end
+-- Function to toggle AutoAFK
+local function toggleAutoAFK()
+    autoAFKState = not autoAFKState
+    autoAFKLabel.Text = "AutoAFK (" .. (autoAFKState and "ON" or "OFF") .. ")"
+    -- Implement AutoAFK functionality here
 end
 
--- Aim Assist function (to track and aim at entities)
-local function activateAimAssist()
-    while aimAssistToggle do
-        local target = getClosestEntity()
-        if target then
-            -- Simulate aiming at the closest entity (this is a placeholder)
-            print("Aim Assist Target: " .. target.Name)
-            -- You can add logic to aim towards the entity or use some other in-game mechanics to track
-        end
-        wait(0.1)  -- Update the tracking every 0.1 seconds
-    end
+-- Function to toggle AutoJump
+local function toggleAutoJump()
+    autoJumpState = not autoJumpState
+    autoJumpLabel.Text = "AutoJump (" .. (autoJumpState and "ON" or "OFF") .. ")"
+    -- Implement AutoJump functionality here
 end
 
--- Connect the toggles to the respective functions
-farmBoarsToggleButton.MouseButton1Click:Connect(function()
-    farmBoarsToggle = not farmBoarsToggle
-    toggleButton(farmBoarsToggleButton, farmBoarsToggle)
-end)
-
-aimAssistToggleButton.MouseButton1Click:Connect(function()
-    aimAssistToggle = not aimAssistToggle
-    toggleButton(aimAssistToggleButton, aimAssistToggle)
-    if aimAssistToggle then
-        activateAimAssist()  -- Start the aim assist if enabled
-    end
-end)
-
-killAuraToggleButton.MouseButton1Click:Connect(function()
-    killAuraToggle = not killAuraToggle
-    toggleButton(killAuraToggleButton, killAuraToggle)
-    if killAuraToggle then
-        activateKillAura()  -- Start the kill aura if enabled
-    end
-end)
+-- Connect the toggles to MouseButton1Click (left-click)
+killAuraLabel.MouseButton1Click:Connect(toggleKillAura)
+aimAssistLabel.MouseButton1Click:Connect(toggleAimAssist)
+autoAFKLabel.MouseButton1Click:Connect(toggleAutoAFK)
+autoJumpLabel.MouseButton1Click:Connect(toggleAutoJump)
