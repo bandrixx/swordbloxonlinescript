@@ -1,14 +1,11 @@
--- DO NOT COPY THIS CODE IF YOU WANT TO COPY AND MAKE ANY CHANGES
+-- DO NOT OCPY THIS CODE IF YOU WANT TO SHARE IT OR MAKE MODIFACATIONS PLEASE LINK YOUR VERSION AND THE ORIGINAL VERSION WHICH IS THIS!
 
-if game.PlaceId ~= 4733278992 and not table.find(game:GetService("AssetService"):GetPlaceIdAssociatedGamePlaces(4733278992), game.PlaceId) then
-    warn("This script is not compatible with this game.")
+local allowedGameId = 4733278992
+
+if game.PlaceId ~= allowedGameId and not table.find(game:GetService("AssetService"):GetLocalAssociatedGamePlaces(), allowedGameId) then
+    warn("This script can only be used in Sword Blox Online Rebirth.")
     return
 end
-
-local Players = game:GetService("Players")
-local LocalPlayer = Players.LocalPlayer
-local HumanoidRootPart = LocalPlayer.Character:WaitForChild("HumanoidRootPart")
-local Workspace = game:GetService("Workspace")
 
 local ScreenGui = Instance.new("ScreenGui")
 local Frame = Instance.new("Frame")
@@ -16,147 +13,133 @@ local FarmButton = Instance.new("TextButton")
 local AuraButton = Instance.new("TextButton")
 local InfiniteButton = Instance.new("TextButton")
 local CloseButton = Instance.new("TextButton")
-local Notification = Instance.new("Frame")
-local NotificationText = Instance.new("TextLabel")
+local Notification = Instance.new("TextLabel")
 
-ScreenGui.Name = "ExecutorScriptUI"
-ScreenGui.Parent = game.CoreGui
+ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+ScreenGui.Name = "CustomScriptUI"
 
-Frame.Name = "MainFrame"
 Frame.Parent = ScreenGui
+Frame.AnchorPoint = Vector2.new(0.5, 0.5)
+Frame.Position = UDim2.new(0.5, 0, 0.5, 0)
+Frame.Size = UDim2.new(0, 300, 0, 200)
 Frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-Frame.Size = UDim2.new(0.3, 0, 0.5, 0)
-Frame.Position = UDim2.new(0.35, 0, 0.25, 0)
+Frame.BorderSizePixel = 0
 
-local buttons = {
-    {FarmButton, "Farm", 0.1},
-    {AuraButton, "Aura", 0.4},
-    {InfiniteButton, "Infinite", 0.7},
-}
-
-for _, btn in pairs(buttons) do
-    local button, text, pos = unpack(btn)
+local function configureButton(button, text, position)
     button.Parent = Frame
-    button.Size = UDim2.new(0.6, 0, 0.15, 0)
-    button.Position = UDim2.new(0.2, 0, pos, 0)
-    button.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    button.Size = UDim2.new(0.8, 0, 0.2, 0)
+    button.Position = position
     button.Text = text
-    button.TextColor3 = Color3.fromRGB(255, 255, 255)
+    button.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    button.TextColor3 = Color3.new(1, 1, 1)
+    button.Font = Enum.Font.SourceSans
+    button.TextSize = 20
 end
 
-CloseButton.Name = "CloseButton"
-CloseButton.Parent = Frame
-CloseButton.Size = UDim2.new(0.1, 0, 0.1, 0)
-CloseButton.Position = UDim2.new(0.9, -10, 0, 10)
-CloseButton.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
-CloseButton.Text = "X"
-CloseButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+configureButton(FarmButton, "Farm", UDim2.new(0.1, 0, 0.1, 0))
+configureButton(AuraButton, "Aura", UDim2.new(0.1, 0, 0.4, 0))
+configureButton(InfiniteButton, "Infinite", UDim2.new(0.1, 0, 0.7, 0))
 
-Notification.Name = "Notification"
+CloseButton.Parent = Frame
+CloseButton.Size = UDim2.new(0.2, 0, 0.2, 0)
+CloseButton.Position = UDim2.new(0.8, -30, 0, 10)
+CloseButton.Text = "X"
+CloseButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+CloseButton.TextColor3 = Color3.new(1, 1, 1)
+CloseButton.Font = Enum.Font.SourceSans
+CloseButton.TextSize = 20
+
 Notification.Parent = ScreenGui
+Notification.AnchorPoint = Vector2.new(0.5, 1)
+Notification.Position = UDim2.new(0.5, 0, 0.9, 0)
+Notification.Size = UDim2.new(0, 400, 0, 50)
 Notification.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-Notification.Size = UDim2.new(0.4, 0, 0.2, 0)
-Notification.Position = UDim2.new(0.3, 0, 0.7, 0)
+Notification.TextColor3 = Color3.new(1, 1, 1)
+Notification.Text = "Press K to reopen the menu."
+Notification.Font = Enum.Font.SourceSans
+Notification.TextSize = 16
 Notification.Visible = false
 
-NotificationText.Name = "NotificationText"
-NotificationText.Parent = Notification
-NotificationText.Size = UDim2.new(1, 0, 1, 0)
-NotificationText.TextColor3 = Color3.fromRGB(255, 255, 255)
-NotificationText.TextWrapped = true
-NotificationText.Font = Enum.Font.SourceSans
-NotificationText.TextSize = 24
-
 local function showNotification(text)
+    Notification.Text = text
     Notification.Visible = true
-    NotificationText.Text = text
-    wait(3)
-    Notification.Visible = false
+    task.delay(3, function()
+        Notification.Visible = false
+    end)
 end
 
-local farming = false
-FarmButton.MouseButton1Click:Connect(function()
-    farming = not farming
-    if farming then
-        showNotification("Auto Farm Enabled")
-        while farming and wait() do
-
-            HumanoidRootPart.CFrame = CFrame.new(0, -50, 0)
-
-            for _, entity in pairs(Workspace:GetDescendants()) do
-                if entity:FindFirstChild("Humanoid") and entity:FindFirstChild("HumanoidRootPart") then
-                    entity.HumanoidRootPart.CFrame = HumanoidRootPart.CFrame
-                    fireclickdetector(entity.ClickDetector)
+local function enableFarm()
+    showNotification("Farm mode activated: Killing entities (boars, bosses) without moving.")
+    while true do
+        task.wait(0.5)
+        for _, mob in pairs(workspace:GetDescendants()) do
+            if mob:IsA("Model") and mob:FindFirstChild("Humanoid") then
+                local rootPart = mob:FindFirstChild("HumanoidRootPart")
+                if rootPart then
+                    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = rootPart.CFrame
+                    task.wait(0.5)
+                    game:GetService("VirtualUser"):Button1Down(Vector2.new(0, 0), workspace.CurrentCamera.CFrame)
                 end
             end
         end
-    else
-        showNotification("Auto Farm Disabled")
     end
-end)
+end
 
-local aimAssist = false
-local killAura = false
-AuraButton.MouseButton1Click:Connect(function()
-    aimAssist = not aimAssist
-    killAura = not killAura
-    if aimAssist or killAura then
-        showNotification("Aura Enabled (Aim Assist + Kill Aura)")
-        while (aimAssist or killAura) and wait() do
-
-            local nearest = nil
-            local nearestDistance = math.huge
-            for _, entity in pairs(Workspace:GetDescendants()) do
-                if entity:FindFirstChild("Humanoid") and entity:FindFirstChild("HumanoidRootPart") then
-                    local distance = (HumanoidRootPart.Position - entity.HumanoidRootPart.Position).Magnitude
-                    if distance < nearestDistance then
-                        nearest = entity
-                        nearestDistance = distance
+local function enableAura()
+    showNotification("Aura mode activated: Kill Aura and Aim Assist enabled.")
+    spawn(function()
+        while true do
+            task.wait(0.1)
+            for _, mob in pairs(workspace:GetDescendants()) do
+                if mob:IsA("Model") and mob:FindFirstChild("Humanoid") and mob:FindFirstChild("HumanoidRootPart") then
+                    if (mob.HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).magnitude < 10 then
+                        game:GetService("VirtualUser"):Button1Down(Vector2.new(0, 0), workspace.CurrentCamera.CFrame)
+                        game.Players.LocalPlayer.Character.Humanoid.Jump = true
                     end
                 end
             end
-            if nearest then
-                if aimAssist then
-                    -- Track entity
-                    HumanoidRootPart.CFrame = CFrame.new(HumanoidRootPart.Position, nearest.HumanoidRootPart.Position)
-                end
-                if killAura and nearestDistance < 10 then
-                    -- Jump and attack
-                    LocalPlayer.Character.Humanoid.Jump = true
-                    fireclickdetector(nearest.ClickDetector)
+        end
+    end)
+
+    local aimAssistGui = Instance.new("TextLabel")
+    aimAssistGui.Parent = ScreenGui
+    aimAssistGui.Text = "⭐ Aim Assist Enabled ⭐\nGo in first person or shift lock for better experience."
+    aimAssistGui.Size = UDim2.new(0, 300, 0, 100)
+    aimAssistGui.Position = UDim2.new(0.5, -150, 0.7, 0)
+    aimAssistGui.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    aimAssistGui.TextColor3 = Color3.new(1, 1, 1)
+    aimAssistGui.TextSize = 16
+    task.wait(5)
+    aimAssistGui:Destroy()
+end
+
+local function enableInfinite()
+    showNotification("Infinite stamina and health activated!")
+    spawn(function()
+        while true do
+            task.wait(1)
+            local player = game.Players.LocalPlayer
+            if player.Character and player.Character:FindFirstChild("Humanoid") then
+                player.Character.Humanoid.MaxHealth = math.huge
+                player.Character.Humanoid.Health = math.huge
+                if player.Character:FindFirstChild("Stamina") then
+                    player.Character.Stamina.Value = math.huge
                 end
             end
         end
-    else
-        showNotification("Aura Disabled")
-    end
-end)
+    end)
+end
 
-local infiniteEnabled = false
-InfiniteButton.MouseButton1Click:Connect(function()
-    infiniteEnabled = not infiniteEnabled
-    if infiniteEnabled then
-        showNotification("Infinite Mode Enabled")
-        LocalPlayer.Character.Humanoid.MaxHealth = math.huge
-        LocalPlayer.Character.Humanoid.Health = math.huge
-        LocalPlayer.Character.Humanoid.WalkSpeed = 50
-        LocalPlayer.Character.Humanoid.JumpPower = 100
-    else
-        showNotification("Infinite Mode Disabled")
-        LocalPlayer.Character.Humanoid.MaxHealth = 100
-        LocalPlayer.Character.Humanoid.WalkSpeed = 16
-        LocalPlayer.Character.Humanoid.JumpPower = 50
-    end
-end)
-
+FarmButton.MouseButton1Click:Connect(enableFarm)
+AuraButton.MouseButton1Click:Connect(enableAura)
+InfiniteButton.MouseButton1Click:Connect(enableInfinite)
 CloseButton.MouseButton1Click:Connect(function()
-    ScreenGui.Enabled = false
+    Frame.Visible = false
     showNotification("Press K to reopen the menu.")
 end)
 
-game:GetService("UserInputService").InputBegan:Connect(function(input, isProcessed)
-    if isProcessed then return end
-    if input.KeyCode == Enum.KeyCode.K then
-        ScreenGui.Enabled = not ScreenGui.Enabled
+game:GetService("UserInputService").InputBegan:Connect(function(input, gameProcessed)
+    if not gameProcessed and input.KeyCode == Enum.KeyCode.K then
+        Frame.Visible = not Frame.Visible
     end
 end)
