@@ -1,5 +1,3 @@
--- DO NOT OCPY THIS CODE IF YOU WANT TO SHARE IT OR MAKE MODIFACATIONS PLEASE LINK YOUR VERSION AND THE ORIGINAL VERSION WHICH IS THIS!
-
 local allowedGameId = 4733278992
 
 if game.PlaceId ~= allowedGameId and not table.find(game:GetService("AssetService"):GetLocalAssociatedGamePlaces(), allowedGameId) then
