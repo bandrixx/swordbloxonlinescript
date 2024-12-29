@@ -60,24 +60,26 @@ local function showNotification(text)
 end
 
 local function enableFarm()
-    showNotification("Farm mode activated: Killing entities (boars, bosses) without moving.")
-    while true do
-        task.wait(0.5)
-        for _, mob in pairs(workspace:GetDescendants()) do
-            if mob:IsA("Model") and mob:FindFirstChild("Humanoid") then
-                local rootPart = mob:FindFirstChild("HumanoidRootPart")
-                if rootPart then
-                    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = rootPart.CFrame
-                    task.wait(0.5)
-                    game:GetService("VirtualUser"):Button1Down(Vector2.new(0, 0), workspace.CurrentCamera.CFrame)
+    showNotification("Farm mode activated.")
+    spawn(function()
+        while true do
+            task.wait(0.5)
+            for _, mob in pairs(workspace:GetDescendants()) do
+                if mob:IsA("Model") and mob:FindFirstChild("Humanoid") and mob:FindFirstChild("HumanoidRootPart") then
+                    local rootPart = mob:FindFirstChild("HumanoidRootPart")
+                    if rootPart then
+                        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = rootPart.CFrame
+                        task.wait(0.5)
+                        game:GetService("VirtualUser"):Button1Down(Vector2.new(0, 0), workspace.CurrentCamera.CFrame)
+                    end
                 end
             end
         end
-    end
+    end)
 end
 
 local function enableAura()
-    showNotification("Aura mode activated: Kill Aura and Aim Assist enabled.")
+    showNotification("Aura mode activated.")
     spawn(function()
         while true do
             task.wait(0.1)
@@ -91,17 +93,6 @@ local function enableAura()
             end
         end
     end)
-
-    local aimAssistGui = Instance.new("TextLabel")
-    aimAssistGui.Parent = ScreenGui
-    aimAssistGui.Text = "⭐ Aim Assist Enabled ⭐\nGo in first person or shift lock for better experience."
-    aimAssistGui.Size = UDim2.new(0, 300, 0, 100)
-    aimAssistGui.Position = UDim2.new(0.5, -150, 0.7, 0)
-    aimAssistGui.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-    aimAssistGui.TextColor3 = Color3.new(1, 1, 1)
-    aimAssistGui.TextSize = 16
-    task.wait(5)
-    aimAssistGui:Destroy()
 end
 
 local function enableInfinite()
