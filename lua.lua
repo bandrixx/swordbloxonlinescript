@@ -1,10 +1,3 @@
-local allowedGameId = 4733278992
-
-if game.PlaceId ~= allowedGameId and not table.find(game:GetService("AssetService"):GetLocalAssociatedGamePlaces(), allowedGameId) then
-    warn("This script can only be used in Sword Blox Online Rebirth.")
-    return
-end
-
 local ScreenGui = Instance.new("ScreenGui")
 local Frame = Instance.new("Frame")
 local FarmButton = Instance.new("TextButton")
